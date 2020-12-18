@@ -1,0 +1,26 @@
+Package: mfdp
+Title: Multi Fleet Deterministic Projection
+Version: 0.0.1
+Authors@R: 
+    person(given = "Ibrahim",
+           family = "Umar",
+           role = c("aut", "cre"),
+           email = "ibrahim.umar@hi.no")
+Description:
+    Program for the fisheries short-term prediction. Allows for
+    multi-fleet catch constraints and multi-annual prediction.
+License: LGPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports:
+    FLCore,
+    ggplotFL,
+    ggplot2,
+    grid,
+    gridExtra,
+    data.table,
+    openxlsx
+Additional_repositories: http://flr-project.org/R
+Suggests: tinytest
