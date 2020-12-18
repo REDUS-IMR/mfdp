@@ -34,6 +34,10 @@ read_mfdp <- function(indexfile) {
         return(ret)
     }
 	
+    # Get path
+    path <- dirname(indexfile)
+
+    # Read index
     raw <- readLines(indexfile)
 
 	# Translate fileindex
@@ -43,7 +47,7 @@ read_mfdp <- function(indexfile) {
     raw_data <- list()
 	control_files <- list()
 	for(i in (seq_len(length(raw) - 3) + 3)) {
-		tmpdat <- read_inner(raw[[i]])
+		tmpdat <- read_inner(paste0(path, "/", raw[[i]]))
 		if(!is.null(tmpdat)) {
 			# Read fileid
 			fileid <- attr(tmpdat, "fileid")
@@ -61,7 +65,7 @@ read_mfdp <- function(indexfile) {
 
     # Read control file
 	for (cf in control_files) {
-    	ctrl_raw <- readLines(cf)
+    	ctrl_raw <- readLines(paste0(path, "/", cf))
 		## Get num of year
 		nyr <- as.numeric(ctrl_raw[2])
 		yrdiff <- nyr - 3
