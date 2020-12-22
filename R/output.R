@@ -5,7 +5,7 @@
 #' @importFrom data.table as.data.table := setcolorder
 #' @importFrom gridExtra arrangeGrob tableGrob grid.arrange
 #' @importFrom grid textGrob gList 
-generateTable1 <- function(res, filename) {
+generateTable1 <- function(res, filename, out_dir) {
 
 	# Getting data
 	stk <- res$stk
@@ -53,7 +53,7 @@ generateTable1 <- function(res, filename) {
 		formattedOut[[i]] <- list(content = out[[i]])
 	}
 
-	pdf(filename, height = 13, width = 6 * length(outGrob))
+	pdf(paste0(out_dir, "/", filename, "-prm.pdf"), height = 13, width = 6 * length(outGrob))
 
 	nCol <- length(outGrob)
 
@@ -70,7 +70,7 @@ generateTable1 <- function(res, filename) {
 #' @importFrom data.table dcast := copy
 #' @importFrom gridExtra gtable_combine
 #' @importFrom grid grid.newpage grid.draw
-generateTable2 <- function(res, filename) {
+generateTable2 <- function(res, filename, out_dir) {
 
 	# Getting data
 	stk <- res$stk
@@ -113,7 +113,7 @@ generateTable2 <- function(res, filename) {
 	}
 
 	# Generate pdf
-	pdf(filename, width = 17)
+	pdf(paste0(out_dir, "/", filename, "-prs.pdf"), width = 17)
 	for(yr in yrList) {
 		# Combine tables
 		outGrob <- gtable_combine(tableGrob(formattedOut[[yr]][["header"]]), tableGrob(formattedOut[[yr]][["content"]], rows = NULL), along = 2)
@@ -127,7 +127,7 @@ generateTable2 <- function(res, filename) {
 
 # Generate XLSX file
 #' @importFrom openxlsx createWorkbook addWorksheet writeData saveWorkbook
-generateXlsx <- function(table1 = NA, table2 = NA, table3 = NA, filename) {
+generateXlsx <- function(table1 = NA, table2 = NA, table3 = NA, filename, out_dir) {
 
 	wb <- createWorkbook()
 	if(!is.na(table1[1])) {
@@ -155,24 +155,24 @@ generateXlsx <- function(table1 = NA, table2 = NA, table3 = NA, filename) {
 			writeData(wb, wsName, table3[[i]][["content"]], startRow = 2)
 		}
 	}
-	saveWorkbook(wb, file = paste0(filename, ".xlsx") , overwrite = TRUE)
+	saveWorkbook(wb, file = paste0(out_dir, "/", filename, ".xlsx") , overwrite = TRUE)
 }
 
 # Generate plots
 #' @importFrom ggplotFL plot
-generatePlots <- function(stk1 = NA, stk2 = NA, stk3 = NA, filename) {
+generatePlots <- function(stk1 = NA, stk2 = NA, stk3 = NA, filename, out_dir) {
 	if(isS4(stk1[[1]])) {
-		plName <- paste0(filename, "_prm_plot.pdf")
+		plName <- paste0(out_dir, "/", filename, "_prm_plot.pdf")
 		plot(stk1$stk)
 		ggsave(plName)
 	}
 	if(isS4(stk2[[1]])) {
-		plName <- paste0(filename, "_prs_plot.pdf")
+		plName <- paste0(out_dir, "/", filename, "_prs_plot.pdf")
 		plot(stk2$stk)
 		ggsave(plName)
 	}
 	if(isS4(stk3[[1]])) {
-		plName <- paste0(filename, "_prs_rules_plot.pdf")
+		plName <- paste0(out_dir, "/", filename, "_prs_rules_plot.pdf")
 		plot(stk3$stk)
 		ggsave(plName)
 	}

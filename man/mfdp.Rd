@@ -4,12 +4,15 @@
 \alias{mfdp}
 \title{Run MFDP}
 \usage{
-mfdp(input_file, run_name = "mfdp")
+mfdp(input_file, run_name = "mfdp", out_dir = tempdir())
 }
 \arguments{
 \item{input_file}{A path to the MFDP index file}
 
-\item{run_name}{A name for the run. This will be applied in the result file names.}
+\item{run_name}{A name for the run. This will be applied in the result file
+names. Default is 'mfdp'.}
+
+\item{out_dir}{Path for the generated output files. Default is \code{tempdir()}.}
 }
 \value{
 A list of result objects
