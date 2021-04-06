@@ -1,5 +1,10 @@
-# Read single-file MFDP input file
-read_mfdp_single <- function(inputfile) {
+# Read single-file MFDP input table file
+read_mfdp_input_table <- function(inputfile) {
+
+	# Check input file
+	if(!file.exists(inputfile))
+		return(NA)
+
 	raw <- readLines(inputfile)
 
 	output <- list()

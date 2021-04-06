@@ -1,1 +1,1 @@
-utils::globalVariables(c("age", "year"))
+utils::globalVariables(c("age", "year", "V1"))
