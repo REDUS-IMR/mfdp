@@ -22,6 +22,10 @@ doForecast <- function(stk, parameters, management.options.table = FALSE, single
 	ftgt_tmp <- catch(stk)
 	ftgt_tmp[] <- 0
 
+	# We need flag to indicate under bpa
+	parameters$ssbunder <- catch(stk)
+	parameters$ssbunder[] <- 0
+
     # Loop years
 	for (y in seq_along(years)) {
 
@@ -48,8 +52,19 @@ doForecast <- function(stk, parameters, management.options.table = FALSE, single
 				fmult_tmp[, as.character(yr)] <- yr_trgt
 				ftgt_tmp[, as.character(yr)] <- fbar(stk[, as.character(yr)]) * fmult_tmp[, as.character(yr)]
 			} else if(yr_flag == 3) {
-				# This is a placeholder for HCR based options
-				stop("Soon to be for HCR option!")
+				# Simple Ftgt with Bpa limit
+
+				## Check SSB < Bpa
+				ssb <- as.numeric(ssb(stk)[, as.character(yr)])[1]
+				bpa <- parameters$hcrObj$args$bpa
+				if(ssb < bpa) {
+					parameters$ssbunder[, as.character(yr)] <- 1
+					yr_trgt <- (ssb / bpa) * yr_trgt
+				}
+
+				# Apply Ftarget
+				ftgt_tmp[, as.character(yr)] <- yr_trgt
+				fmult_tmp[, as.character(yr)] <- ftgt_tmp[, as.character(yr)] / fbar(stk[, as.character(yr)])
 			}
 	    }
 

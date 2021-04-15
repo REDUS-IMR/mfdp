@@ -4,10 +4,14 @@
 \alias{mfdp}
 \title{Run MFDP}
 \usage{
-mfdp(input_file, run_name = "mfdp", out_dir = tempdir())
+mfdp(input, configs = NULL, run_name = "mfdp", out_dir = tempdir())
 }
 \arguments{
-\item{input_file}{A path to the MFDP index file}
+\item{input}{Input to MFDP. It can be either 1) A path to the MFDP index file, or 2) An FLStock object
+from \code{read_mfdp_input_table()}.}
+
+\item{configs}{Path to extra configuration file for MFDP. This may contain TAC,
+HCR function, among others.}
 
 \item{run_name}{A name for the run. This will be applied in the result file
 names. Default is 'mfdp'.}
