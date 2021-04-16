@@ -134,7 +134,7 @@ generateXlsx <- function(table1 = NA, table2 = NA, table3 = NA, filename, out_di
 
 	wb <- createWorkbook()
 	if(!is.na(table1[1])) {
-		for(i in names(table1)) {
+		for(i in seq_along(table1)) {
 			wsName <- paste0(filename, "_prm_", i)
 			addWorksheet(wb, wsName)
 			writeData(wb, wsName, table1[[i]][["content"]])
