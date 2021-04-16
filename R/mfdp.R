@@ -66,7 +66,7 @@ mfdp <- function(input, configs = NULL, run_name = "mfdp", out_dir = tempdir()) 
 	table2 <- generateTable2(res2, run_name, out_dir)
 
     # Applying rules if we found extra configs
-    if(!is.null(parameters$hcrObj)) {
+    if(!is.null(parameters$hcrObj) && !is.null(extraConf$hcrObj$args$threeYrRule) && extraConf$hcrObj$args$threeYrRule == TRUE) {
         revisedTarget <- applyRules(res2, 1)
         parameters$flag[2] <- 1
         parameters$target[2] <- revisedTarget
