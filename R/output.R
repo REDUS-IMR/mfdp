@@ -102,11 +102,14 @@ generateTable2 <- function(res, filename, out_dir) {
 		tbl0 <- copy(ret[year == yr,])
 		tbl0[, year := NULL]
 		
-		header <- rbind(c("Year:", yr, "F multiplier:", as.numeric(fmult[, yr]), "Fbar:", as.numeric(ftgt[, yr])))
+		header <- rbind(c("Year:", yr, "F multiplier:", as.numeric(round(fmult[, yr], 4)), "Fbar:", as.numeric(round(ftgt[, yr], 4))))
 
 		sfunc <- function(z) if (is.numeric(z)) sum(z) else ''
 		footer <- as.data.table(lapply(tbl0, sfunc))
 		footer[, `:=`(F="", age = "TOTAL")]
+
+		# Round F
+		tbl0[, F:=round(F, 4)]
 
 		# Prepare output
 		formattedOut[[yr]] <- list(header = header, content = rbind(tbl0, footer)) 
