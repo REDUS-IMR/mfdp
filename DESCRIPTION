@@ -1,14 +1,25 @@
 Package: mfdp
 Title: Multi Fleet Deterministic Projection
 Version: 0.0.1
-Authors@R: 
+Authors@R: c(
     person(given = "Ibrahim",
-           family = "Umar",
-           role = c("aut", "cre"),
-           email = "ibrahim.umar@hi.no")
+        family = "Umar",
+        role = c("aut", "cre"),
+        email = "ibrahim.umar@hi.no"),
+    person(given = "Arved",
+        family = "Staby",
+        role = "ctb"),
+    person(given = "Bjarte",
+        family = "Bogstad",
+        role = "ctb"),
+    person(given = "Edda",
+        family = "Johannesen",
+        role = "ctb"),
+    person(given = "Norwegian Institute of Marine Research",
+        role = c("cph", "fnd")))
 Description:
-    Program for the fisheries short-term prediction. Allows for
-    multi-fleet catch constraints and multi-annual prediction.
+    Program for the fisheries short-term prediction. Currently, only allows for
+    single-fleet catch constraints and multi-annual prediction.
 License: LGPL (>= 3)
 Encoding: UTF-8
 LazyData: true
