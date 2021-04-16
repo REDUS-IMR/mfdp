@@ -1,4 +1,8 @@
-# Read single-file MFDP input table file
+#' Read single-file MFDP input table format
+#'
+#' @param inputfile A path to the text file which contains the MFDP input table
+#' @return An FLStock object with all the data from the MFDP input table
+#' @export
 read_mfdp_input_table <- function(inputfile) {
 
 	# Check input file
