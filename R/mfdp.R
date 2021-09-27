@@ -58,12 +58,18 @@ mfdp <- function(input, configs = NULL, run_name = "mfdp", out_dir = tempdir()) 
     }
 
     # management.options.table
-	res1 <- doForecast(stk, parameters, management.options.table = TRUE)
-	table1 <- generateTable1(res1, run_name, out_dir)
+    res1 <- doForecast(stk, parameters, management.options.table = TRUE)
+    table1 <- generateTable1(res1, run_name, out_dir)
 
     # single.option.prediction
-	res2 <- doForecast(stk, parameters, single.option.prediction = TRUE)
-	table2 <- generateTable2(res2, run_name, out_dir)
+    res2 <- doForecast(stk, parameters, single.option.prediction = TRUE)
+    table2 <- generateTable2(res2, run_name, out_dir)
+
+    # Create XLSX
+    generateXlsx(table1, table2, filename = run_name, out_dir = out_dir)
+
+    # Create plots
+    generatePlots(res1, res2, filename = run_name, out_dir = out_dir)
 
     # Applying rules if we found extra configs
     if(!is.null(parameters$hcrObj) && !is.null(extraConf$hcrObj$args$threeYrRule) && extraConf$hcrObj$args$threeYrRule == TRUE) {
@@ -78,25 +84,19 @@ mfdp <- function(input, configs = NULL, run_name = "mfdp", out_dir = tempdir()) 
         # Redo management.options.table and single.option.prediction
         # management.options.table
         res1_1 <- doForecast(stk, parameters, management.options.table = TRUE)
-        table1_1 <- generateTable1(res1_1, paste0(run_name, "_yr+1"), out_dir)
+        table1_1 <- generateTable1(res1_1, paste0(run_name, "_3yrRule"), out_dir)
 
         # single.option.prediction
         res2_1 <- doForecast(stk, parameters, single.option.prediction = TRUE)
-        table2_1 <- generateTable2(res2_1, paste0(run_name, "_yr+1"), out_dir)
+        table2_1 <- generateTable2(res2_1, paste0(run_name, "_3yrRule"), out_dir)
 
         # Create XLSX
-        generateXlsx(table1_1, table2_1, filename = paste0(run_name, "_yr+1"), out_dir = out_dir)
+        generateXlsx(table1_1, table2_1, filename = paste0(run_name, "_3yrRule"), out_dir = out_dir)
 
         # Create plots
-        generatePlots(res1_1, res2_1, filename = paste0(run_name, "_yr+1"), out_dir = out_dir)
+        generatePlots(res1_1, res2_1, filename = paste0(run_name, "_3yrRule"), out_dir = out_dir)
     }
 
-    # Create XLSX
-	generateXlsx(table1, table2, filename = run_name, out_dir = out_dir)
-
-    # Create plots
-	generatePlots(res1, res2, filename = run_name, out_dir = out_dir)
-
     # Retun list
-	return(list(res1, res2))
+    return(list(res1, res2))
 }
