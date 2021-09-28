@@ -128,6 +128,16 @@ generateTable2 <- function(res, filename, out_dir) {
 	return(formattedOut)
 }
 
+# Generate XLSX file for summary
+#' @importFrom openxlsx createWorkbook addWorksheet writeData saveWorkbook
+generateSummaryXlsx <- function(summary, filename, out_dir) {
+	wb <- createWorkbook()
+	wsName <- paste0(filename, "_summary")
+	addWorksheet(wb, wsName)
+	writeData(wb, wsName, summary)
+	saveWorkbook(wb, file = paste0(out_dir, "/", filename, ".xlsx") , overwrite = TRUE)
+}
+
 # Generate XLSX file
 #' @importFrom openxlsx createWorkbook addWorksheet writeData saveWorkbook
 generateXlsx <- function(table1 = NA, table2 = NA, table3 = NA, filename, out_dir) {

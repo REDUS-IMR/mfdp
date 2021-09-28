@@ -57,7 +57,7 @@ read_mfdp <- function(indexfile) {
 	for(i in (seq_len(length(raw) - 2) + 2)) {
 		tmpdat <- read_inner(paste0(path, "/", raw[[i]]))
 		if(!is.null(tmpdat)) {
-			if(length(tmpdat) > 1 && !is.na(tmpdat)) {
+			if(is(tmpdat, "FLQuant")) {
 				# Read fileid
 				fileid <- attr(tmpdat, "fileid")
 				# Translate into category string
