@@ -1,0 +1,12 @@
+* example param file for NEA Haddock 2020
+Ftarget 0.35 * target F in HCR
+Fpa 0.47 * Fpa
+Flim 0.77 * Flim
+Fagerange 4 7 * age range for reference F (if not given anywhere else)
+Bpa 80000 * trigger point in HCR
+3yearrule no * use 3-rule in calculating TAC, yes/no
+TACpreviousyear 215000 * TAC in intermediate year, used in connection with calculating TAC in first year
+maxchangeup 25 * max annual increase in TAC (%)
+maxchangedown 25 * max annual decrease of TAC (%)
+
+
