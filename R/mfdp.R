@@ -10,7 +10,7 @@
 #' @return A list of result objects
 #' @importFrom utils head read.csv tail
 #' @importFrom methods is
-#' @importFrom FLCore trim
+#' @importFrom FLCore trim iter
 #' @export
 mfdp <- function(input, configs = NULL, run_name = "mfdp", out_dir = tempdir()) {
 
@@ -59,42 +59,55 @@ mfdp <- function(input, configs = NULL, run_name = "mfdp", out_dir = tempdir()) 
 
     # management.options.table
     res1 <- doForecast(stk, parameters, management.options.table = TRUE)
-    table1 <- generateTable1(res1, run_name, out_dir)
 
     # single.option.prediction
     res2 <- doForecast(stk, parameters, single.option.prediction = TRUE)
-    table2 <- generateTable2(res2, run_name, out_dir)
 
-    # Create XLSX
-    generateXlsx(table1, table2, filename = run_name, out_dir = out_dir)
-
-    # Create plots
-    generatePlots(res1, res2, filename = run_name, out_dir = out_dir)
-
-    # Applying rules if we found extra configs
-    if(!is.null(parameters$hcrObj) && !is.null(extraConf$hcrObj$args$threeYrRule) && extraConf$hcrObj$args$threeYrRule == TRUE) {
-        revisedTarget <- applyRules(res2, 1)
-        parameters$flag[2] <- 1
-        parameters$target[2] <- revisedTarget
-        stk <- raw$stk
-
-        # Just do short term for now
-        stk <- trim(stk, year = as.numeric(dims(stk)$minyear):as.numeric(dims(stk)$minyear + 3))
-
-        # Redo management.options.table and single.option.prediction
-        # management.options.table
-        res1_1 <- doForecast(stk, parameters, management.options.table = TRUE)
-        table1_1 <- generateTable1(res1_1, paste0(run_name, "_3yrRule"), out_dir)
-
-        # single.option.prediction
-        res2_1 <- doForecast(stk, parameters, single.option.prediction = TRUE)
-        table2_1 <- generateTable2(res2_1, paste0(run_name, "_3yrRule"), out_dir)
+    # Applying extra rules if we found extra config file
+    if(is.null(parameters$hcrObj)) {
+        # Create tables in PDF
+        table1 <- generateTable1(res1, run_name, out_dir)
+        table2 <- generateTable2(res2, run_name, out_dir)
 
         # Create XLSX
-        generateXlsx(table1_1, table2_1, filename = paste0(run_name, "_3yrRule"), out_dir = out_dir)
+        generateXlsx(table1, table2, filename = run_name, out_dir = out_dir)
 
         # Create plots
-        generatePlots(res1_1, res2_1, filename = paste0(run_name, "_3yrRule"), out_dir = out_dir)
+        generatePlots(res1, res2, filename = run_name, out_dir = out_dir)
+    } else {
+        suffixes <- c("ftgt", "f0", "fsq", "fpa", "flim")
+        newTargets <- c(NA, 0, as.numeric(iter(res1$ftgt[1,1,],1)), extraConf$hcrObj$args$fpa, extraConf$hcrObj$args$flim)
+        for (idx in seq_along(suffixes)) {
+            suffix <- suffixes[idx]
+            revisedTarget <- applyRules(res2, 1)
+            if(is.na(newTargets[idx])) {
+                parameters$flag[2] <- 1
+                parameters$target[2] <- revisedTarget
+            } else {
+                parameters$flag[2] <- 3
+                parameters$target[2] <- newTargets[idx]
+            }
+            stk <- raw$stk
+
+            # Just do short term for now
+            future <- min(length(years) - 1, 3)
+            stk <- trim(stk, year = as.numeric(dims(stk)$minyear):(as.numeric(dims(stk)$minyear)+ future))
+
+            # Redo management.options.table and single.option.prediction
+            # management.options.table
+            res1_1 <- doForecast(stk, parameters, management.options.table = TRUE)
+            table1_1 <- generateTable1(res1_1, paste0(run_name, "_", suffix), out_dir)
+
+            # single.option.prediction
+            res2_1 <- doForecast(stk, parameters, single.option.prediction = TRUE)
+            table2_1 <- generateTable2(res2_1, paste0(run_name, "_", suffix), out_dir)
+
+            # Create XLSX
+            generateXlsx(table1_1, table2_1, filename = paste0(run_name, "_", suffix), out_dir = out_dir)
+
+            # Create plots
+            generatePlots(res1_1, res2_1, filename = paste0(run_name, "_", suffix), out_dir = out_dir)
+        }
     }
 
     # Retun list

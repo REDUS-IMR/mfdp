@@ -2,6 +2,7 @@
 #'
 #' @param inputfile A path to the text file which contains the MFDP input table
 #' @return An FLStock object with all the data from the MFDP input table
+#' @importFrom data.table fread
 #' @export
 read_mfdp_input_table <- function(inputfile) {
 
@@ -15,23 +16,23 @@ read_mfdp_input_table <- function(inputfile) {
 	start <- 0
 
 	for (i in seq_len(length(raw))) {
-	    line <- strsplit(raw[i], "\\s+")[[1]]
+	    line <- strsplit(raw[i], "\\s+|,")[[1]]
 
 	    # Assume we have 9 columns
 	    if (length(line) > 8 && start == 0) {
-		start <- i
-		year <- trimws(raw[i - 1])
+			start <- i
+			year <- trimws(raw[i - 1])
 	    }
 
 	    if (length(line) <= 8 && start != 0) {
-		output[[year]] <- read.csv(text = paste(raw[start:(i - 1)], collapse = "\n"), sep = "\t", stringsAsFactors = FALSE)
-		start <- 0
+			output[[year]] <- fread(text = paste(raw[start:(i - 1)], collapse = "\n"), stringsAsFactors = FALSE)
+			start <- 0
 	    }
 	}
 
 	# Last line
-	if (length(line) > 8 && start != 0) {
-	    output[[year]] <- read.csv(text = paste(raw[start:i], collapse = "\n"), sep = "\t", stringsAsFactors = FALSE)
+	if (length(line) > 8 && start != 0 && !is.na(as.numeric(year))) {
+	    output[[year]] <- fread(text = paste(raw[start:i], collapse = "\n"), stringsAsFactors = FALSE)
 	    start <- 0
 	}
 

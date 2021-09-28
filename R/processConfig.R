@@ -11,6 +11,8 @@ process_config <- function(inputfile) {
 
     # Getting the values
     ftgt <- as.numeric(raw[tolower(V1) == "ftarget"][[2]])
+    fpa <- as.numeric(raw[tolower(V1) == "fpa"][[2]])
+    flim <- as.numeric(raw[tolower(V1) == "flim"][[2]])
     fbar <- as.numeric(unlist(raw[tolower(V1) == "fagerange", c(2,3)]))
     bpa <- as.numeric(raw[tolower(V1) == "bpa"][[2]])
     threeYrRule <- ifelse(raw[tolower(V1) == "3yearrule"][[2]] == "yes", TRUE, FALSE)
@@ -22,6 +24,8 @@ process_config <- function(inputfile) {
                 hcrObj = list(args = list(
                                 tac = tac,
                                 ftgt = ftgt,
+                                fpa = fpa,
+                                flim = flim,
                                 fbar = fbar,
                                 bpa = bpa,
                                 threeYrRule = threeYrRule,
