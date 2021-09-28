@@ -1,0 +1,12 @@
+2020MFDP Index file 22.04.2020
+ 0 
+****
+2020CWt.txt
+2020SWt.txt
+2020M.txt
+2020Mat.txt
+2020PF.txt
+2020PM.txt
+2020F.txt
+2020N.txt
+2020Ctrl.txt

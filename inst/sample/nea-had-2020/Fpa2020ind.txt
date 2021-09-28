@@ -1,0 +1,12 @@
+Fpa2020MFDP Index file 27.04.2020
+ 0 
+****
+Fpa2020CWt.txt
+Fpa2020SWt.txt
+Fpa2020M.txt
+Fpa2020Mat.txt
+Fpa2020PF.txt
+Fpa2020PM.txt
+Fpa2020F.txt
+Fpa2020N.txt
+Fpa2020Ctrl.txt

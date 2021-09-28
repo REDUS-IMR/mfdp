@@ -1,0 +1,12 @@
+Fsq2020MFDP Index file 27.04.2020
+ 0 
+****
+Fsq2020CWt.txt
+Fsq2020SWt.txt
+Fsq2020M.txt
+Fsq2020Mat.txt
+Fsq2020PF.txt
+Fsq2020PM.txt
+Fsq2020F.txt
+Fsq2020N.txt
+Fsq2020Ctrl.txt

@@ -1,0 +1,12 @@
+Flim2020MFDP Index file 27.04.2020
+ 0 
+****
+Flim2020CWt.txt
+Flim2020SWt.txt
+Flim2020M.txt
+Flim2020Mat.txt
+Flim2020PF.txt
+Flim2020PM.txt
+Flim2020F.txt
+Flim2020N.txt
+Flim2020Ctrl.txt
