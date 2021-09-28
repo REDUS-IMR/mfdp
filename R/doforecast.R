@@ -8,8 +8,14 @@ doForecast <- function(stk, parameters, management.options.table = FALSE, single
 	}
 
 	if(management.options.table == TRUE) {
-		# Prepare iter slots (41 slots for F range between 0 and 2, with 0.05 increments)
-		stk <- propagate(stk, 41)
+		fmin <- 0
+		fmax <- 2
+		increment <- 0.1
+
+		managementSet <- seq(fmin, fmax, by = increment)
+
+		# Prepare iter slots (e.g., 41 slots for F range between 0 and 2, with 0.05 increments)
+		stk <- propagate(stk, length(managementSet))
 	}
 	# Get years
 	years <- c(as.numeric(dims(stk)$minyear):as.numeric(dims(stk)$maxyear))
@@ -70,7 +76,7 @@ doForecast <- function(stk, parameters, management.options.table = FALSE, single
 
 	    # For management.options.table, we multiple FMult in the forecast years
 	    if (management.options.table == TRUE && yr %in% tail(years, 2)) {
-			fmult_tmp[, as.character(yr),,,,] <- seq(0, 2, by = 0.05)
+			fmult_tmp[, as.character(yr),,,,] <- managementSet
 	    }
 
 	    stk <- calcForward(stk, fmult_tmp, yr, years)
