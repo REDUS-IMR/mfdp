@@ -23,7 +23,8 @@ a single summary table.
 excellent FLR suite <https://flr-project.org>. This flexible format enable
 further experiment possibilities.
 
-For more detailed information on the above features, please have a look at the package vignettes.
+For more detailed information on the above features, please have a look at the package 
+[vignettes](https://redus-imr.github.io/mfdp/articles/).
 
 ## Installation
 

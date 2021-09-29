@@ -90,7 +90,7 @@ input <- system.file("sample/nea-had-2020", "Fpa2020ind.txt", package = "mfdp")
 print(input)
 
 # Run it
-output <- mfdp(input, run_name = "test", out_dir = "out")
+output <- mfdp(input, run_name = "test", out_dir = "out-classic")
 ```
 
 ## Output Files
@@ -99,7 +99,7 @@ Running the `mfdp` function above will instruct MFDP to run the forecast
 and write output files into `./out` directory. We can check the output files:
 
 ```{r}
-list.files("out")
+list.files("out-classic")
 ```
 
 ## Results

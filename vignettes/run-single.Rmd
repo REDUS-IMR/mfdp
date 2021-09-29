@@ -181,7 +181,7 @@ config_file <- system.file("sample", "nea-had-2020.params.txt",
                   package = "mfdp")
 
 # Do forecast
-output <- mfdp(input, configs = config_file, run_name = "test", out_dir = "out")
+output <- mfdp(input, configs = config_file, run_name = "test", out_dir = "out-single")
 ```
 
 ## Output Files
@@ -190,7 +190,7 @@ Running the `mfdp` function above will instruct MFDP to run the forecast
 and write output files into `./out` directory. We can check the output files:
 
 ```{r}
-list.files("out")
+list.files("out-classic")
 ```
 
 > NOTE: Since we use a control file that contains **Fpa**, **Flim**, etc. we are
