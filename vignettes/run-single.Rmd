@@ -212,8 +212,8 @@ print(names(output))
 
 Let's see the summary from the different F basis:
 ```{r}
-knitr::kable(output$summary) %>%
-  kableExtra::kable_styling(latex_options = "striped")
+kableExtra::kable_styling(knitr::kable(output$summary),
+            bootstrap_options = "striped", latex_options = "striped")
 ```
 
 Each **prm** and **prs** sub-lists contains the different basis of F used in the forecast.
