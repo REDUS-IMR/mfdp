@@ -1,0 +1,239 @@
+---
+title: "Run MFDP with a Single Input File"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{run-single}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In addition to the classic Lowestoft's MFDP input data,
+R MFDP also supports running forecast using a single file for its input data.
+This new method simplify the run for the users as they can
+have a quick overview of the data quickly.
+
+Please note you will need to provide a control file if you
+want to use a single input data file.
+
+The `mfdp` package provides two samples of the single input files:
+[here](https://github.com/REDUS-IMR/mfdp/tree/main/inst/sample).
+In the same directory you can also find a sample of the control file.
+
+## Input data file structure
+
+The structure of the input data file is identical to the Lowestoft's MFDP
+`.prd` file output. Here is an example of the data:
+
+**nea-had-2020.input.csv**
+```
+"MFDP version 1a"
+"Run: Manage2020"
+"Time and date: 15:02 27.04.2020"
+"Fbar age range: 4-7"
+""
+""
+2020
+"Age","N","M","Mat","PF","PM","SWt","Sel","CWt"
+3,497416,.402,.027839644,0,0,.276890309,.037,.716
+4,531880,.269,.084263959,0,0,.518907563,.154,.95
+5,171000,.238,.230460922,0,0,.859979101,.324,1.224
+6,60331,.273,.526207605,0,0,1.35966736,.504,1.604
+7,29429,.2,.779874214,0,0,1.854188211,.524,1.895
+8,10839,.2,.884133612,0,0,2.16838843,.584,2.077
+9,9746,.2,.963917526,0,0,2.784901758,.584,2.38
+10,3557,.2,.976530612,0,0,3.015625,.584,2.626
+11,4436,.2,1,0,0,3.542497377,.584,2.79
+12,1896,.2,1,0,0,3.361,.584,3.045
+13,4665,.2,1,0,0,3.628,.584,3.329
+""
+2021
+"Age","N","M","Mat","PF","PM","SWt","Sel","CWt"
+3,293623,.402,.029,0,0,.269,.037,.708
+4,".",.269,.083,0,0,.515,.154,.946
+5,".",.238,.215,0,0,.823,.324,1.192
+6,".",.273,.457,0,0,1.214,.504,1.471
+7,".",.2,.756,0,0,1.774,.524,1.846
+8,".",.2,.904,0,0,2.285,.584,2.128
+9,".",.2,.948,0,0,2.585,.584,2.311
+10,".",.2,.985,0,0,3.222,.584,2.627
+11,".",.2,1,0,0,3.416,.584,2.806
+12,".",.2,1,0,0,3.726,.584,2.993
+13,".",.2,1,0,0,3.677,.584,3.417
+""
+2022
+"Age","N","M","Mat","PF","PM","SWt","Sel","CWt"
+3,38636,.402,.029,0,0,.303,.037,.744
+4,".",.269,.086,0,0,.526,.154,.957
+5,".",.238,.21,0,0,.812,.324,1.182
+6,".",.273,.436,0,0,1.168,.504,1.43
+7,".",.2,.693,0,0,1.589,.524,1.736
+8,".",.2,.888,0,0,2.191,.584,2.087
+9,".",.2,.959,0,0,2.718,.584,2.358
+10,".",.2,.976,0,0,3.001,.584,2.573
+11,".",.2,1,0,0,3.624,.584,2.807
+12,".",.2,1,0,0,3.596,.584,3.004
+13,".",.2,1,0,0,4.029,.584,3.376
+""
+
+"Input units are thousands and kg - output in tonnes"
+```
+
+## Control file structure
+
+The control file must be a text file. Here is a sample of the
+configuration file:
+
+**nea-had-2020.params.txt**
+```
+* example param file for NEA Haddock 2020
+Ftarget 0.35 * target F in HCR
+Fpa 0.47 * Fpa
+Flim 0.77 * Flim
+Fagerange 4 7 * age range for reference F (if not given anywhere else)
+Bpa 80000 * trigger point in HCR
+3yearrule no * use 3-rule in calculating TAC, yes/no
+TACpreviousyear 215000 * TAC in intermediate year, used in connection with calculating TAC in first year
+maxchangeup 25 * max annual increase in TAC (%)
+maxchangedown 25 * max annual decrease of TAC (%)
+```
+
+> NOTE: The keywords are **case sensitive** and all the values
+are **mandatory**.
+
+## Running the forecast
+
+Running the forecast using the single input is a two-steps procedure:
+
+### Loading the data
+
+The first step is we load the data into an `FLStock` class object:
+
+```{r}
+# Load the mfdp library
+library(mfdp)
+
+# Load the input data
+input_file <- system.file("sample", "nea-had-2020.input.csv", package = "mfdp")
+input <- read_mfdp_input_table(input_file)
+
+print(input)
+```
+
+You might want to examine the input data to make sure everyting are properly
+loaded:
+```{r}
+# Load the FLCore library
+library(FLCore)
+
+# Do checks
+print(catch.n(input))
+
+print(catch.wt(input))
+
+print(stock.n(input))
+
+print(stock.wt(input))
+
+print(ssb(input))
+
+print(fbar(input))
+
+# and so on...
+
+```
+
+### Run forecast using the control file
+
+Now that you are confident that the data is properly loaded, we can continue
+to run the forecast:
+```{r}
+# Get the config file path
+config_file <- system.file("sample", "nea-had-2020.params.txt",
+                  package = "mfdp")
+
+# Do forecast
+output <- mfdp(input, configs = config_file, run_name = "test", out_dir = "out")
+```
+
+## Output Files
+
+Running the `mfdp` function above will instruct MFDP to run the forecast
+and write output files into `./out` directory. We can check the output files:
+
+```{r}
+list.files("out")
+```
+
+> NOTE: Since we use a control file that contains **Fpa**, **Flim**, etc. we are
+presented with several output files from different F used in the forecast. Note 
+also the summary file that collated the results summary from the runs.
+
+## Results
+
+After successfully running a forecast, MFDP returns several output
+objects in a single list.
+
+The first level will have the sub-list of **prm** for the 
+**Management Options Table** and **prs** for the **Single Option Prediction** results and  
+a **summary table**.
+
+```{r}
+print(names(output))
+
+print(output$summary)
+```
+
+Each **prm** and **prs** sub-lists contains the different basis of F used in the forecast.
+
+```{r}
+# Use the F management
+print(names(output[["prm"]]))
+
+# Let's see the Management Options Table for Fmgmt
+print(output[["prm"]][["fmgmt"]])
+```
+
+The **stk** object is an `FLStock` class object <https://flr-project.org/FLCore/reference/FLStock.html>
+from the `FLR` suite <https://flr-project.org/>. The developers have provide a wealth of tutorial about the
+format here: <https://flr-project.org/#tutorials>.
+
+Next we have the **fmult** object, which holds the *F multiplier* values over the years in the `FLQuant` class,
+the **ftgt** object which is the *F target* over the years, and lastly **parameters** object, which is
+the control parameters/configuration for the forecast.
+
+Some example of methods supported by FLStock:
+
+```{r}
+library(FLCore)
+
+# Get the SSB
+print(ssb(output[["prm"]][["fmgmt"]]$stk))
+
+# Get the Catch total
+print(catch(output[["prm"]][["fmgmt"]]$stk))
+
+# Get the Catch number
+print(catch.n(output[["prm"]][["fmgmt"]]$stk))
+
+# Get the Fbar
+print(fbar(output[["prm"]][["fmgmt"]]$stk))
+```
+
+Let's plot the forecast results:
+
+```{r}
+# Plot the Management Options Table
+plot(output[["prm"]][["fmgmt"]]$stk)
+```
+
+```{r}
+# Single Option Prediction
+plot(output[["prs"]][["fmgmt"]]$stk)
+```

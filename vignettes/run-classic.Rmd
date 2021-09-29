@@ -1,0 +1,155 @@
+---
+title: "Run MFDP with the Classic Input Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{run-classic}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+R MFDP supports running forecast using the classic Lowestoft's MFDP
+input data. A single input data consists of several files including
+its index file and a control file.
+The `mfdp` package provides samples of these input files
+[here](https://github.com/REDUS-IMR/mfdp/tree/main/inst/sample/nea-had-2020).
+
+## Files structure
+
+This set of input files is indexed by an index file. Let's have a peek at the content
+in one of the index file (e.g., `Fpa2020ind.txt`):
+
+**Fpa2020ind.txt**
+```
+Fpa2020MFDP Index file 27.04.2020
+ 0 
+****
+Fpa2020CWt.txt
+Fpa2020SWt.txt
+Fpa2020M.txt
+Fpa2020Mat.txt
+Fpa2020PF.txt
+Fpa2020PM.txt
+Fpa2020F.txt
+Fpa2020N.txt
+Fpa2020Ctrl.txt
+```
+
+The above index file points to several other files. Let's have a look inside 
+the control file (`Fpa2020Ctrl.txt`):
+
+**Fpa2020Ctrl.txt**
+```
+HCR2020MFDP Index file 27.04.2020control file27.04.2020
+5
+4,7
+497416,293623,38636,272681,272681,
+1
+0
+0
+215000
+1.248296
+.929582
+```
+
+And one of the data file (`Fpa2020CWt.txt`)
+
+**Fpa2020CWt.txt**
+```
+Fpa2020CWt
+1,3
+2020,2024
+3,13
+1
+.716,.95,1.224,1.604,1.895,2.077,2.38,2.626,2.79,3.045,3.329,
+.708,.946,1.192,1.471,1.846,2.128,2.311,2.627,2.806,2.993,3.417,
+.744,.957,1.182,1.43,1.736,2.087,2.358,2.573,2.807,3.004,3.376,
+.744,.957,1.182,1.43,1.736,2.087,2.358,2.573,2.807,3.004,3.376,
+.744,.957,1.182,1.43,1.736,2.087,2.358,2.573,2.807,3.004,3.376,
+```
+
+You can find the full description of the files in the official
+Lowestoft's MFDP manual document [link](https://www.researchgate.net/publication/296788449_The_Multi-Fleet_Deterministic_Projection_Program_MFDP).
+
+## Running the forecast
+
+Running the forecast using the classic input is straightforward:
+
+```{r}
+# Load the mfdp library
+library(mfdp)
+
+# Get the index file (note that we need the full path)
+input <- system.file("sample/nea-had-2020", "Fpa2020ind.txt", package = "mfdp")
+print(input)
+
+# Run it
+output <- mfdp(input, run_name = "test", out_dir = "out")
+```
+
+## Output Files
+
+Running the `mfdp` function above will instruct MFDP to run the forecast
+and write output files into `./out` directory. We can check the output files:
+
+```{r}
+list.files("out")
+```
+
+## Results
+
+After successfully running a forecast, MFDP returns several output
+objects in a single list. Here we use the term **prm** for the 
+**Management Options Table** and **prs** for the 
+**Single Option Prediction** results.
+
+```{r}
+print(names(output))
+
+# Let's see the Management Options Table
+print(output[["prm"]])
+```
+
+The **stk** object is an `FLStock` class object <https://flr-project.org/FLCore/reference/FLStock.html>
+from the `FLR` suite <https://flr-project.org/>. The developers have provide a wealth of tutorial about the
+format here: <https://flr-project.org/#tutorials>.
+
+Next we have the **fmult** object, which holds the *F multiplier* values over the years in the `FLQuant` class,
+the **ftgt** object which is the *F target* over the years, and lastly **parameters** object, which is
+the control parameters/configuration for the forecast.
+
+Some example of methods supported by FLStock:
+
+```{r}
+library(FLCore)
+
+# Get the SSB
+print(ssb(output[["prs"]]$stk))
+
+# Get the Catch total
+print(catch(output[["prs"]]$stk))
+
+# Get the Catch number
+print(catch.n(output[["prs"]]$stk))
+
+# Get the Fbar
+print(fbar(output[["prs"]]$stk))
+```
+
+Let's plot the forecast results:
+
+```{r}
+# Plot the Management Options Table
+plot(output[["prm"]]$stk)
+```
+
+```{r}
+# Single Option Prediction
+plot(output[["prs"]]$stk)
+```
