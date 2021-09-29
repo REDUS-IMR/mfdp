@@ -143,7 +143,7 @@ Fpa2020Ctrl.txt</code></pre>
 <span class="co">#&gt; [1] "/home/runner/work/_temp/Library/mfdp/sample/nea-had-2020/Fpa2020ind.txt"</span>
 
 <span class="co"># Run it</span>
-<span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mfdp.html">mfdp</a></span><span class="op">(</span><span class="va">input</span>, run_name <span class="op">=</span> <span class="st">"test"</span>, out_dir <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span>
+<span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mfdp.html">mfdp</a></span><span class="op">(</span><span class="va">input</span>, run_name <span class="op">=</span> <span class="st">"test"</span>, out_dir <span class="op">=</span> <span class="st">"out-classic"</span><span class="op">)</span>
 <span class="co">#&gt; Warning in readLines(inputfile): incomplete final line found on '/home/runner/</span>
 <span class="co">#&gt; work/_temp/Library/mfdp/sample/nea-had-2020/Fpa2020N.txt'</span>
 <span class="co">#&gt; Warning in is.na(raw$stk): is.na() applied to non-(list or vector) of type 'S4'</span>
@@ -155,7 +155,7 @@ Fpa2020Ctrl.txt</code></pre>
 <a href="#output-files" class="anchor"></a>Output Files</h2>
 <p>Running the <code>mfdp</code> function above will instruct MFDP to run the forecast and write output files into <code>./out</code> directory. We can check the output files:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"out"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"out-classic"</span><span class="op">)</span>
 <span class="co">#&gt; [1] "test_prm_plot.pdf" "test_prs_plot.pdf" "test-prm.pdf"     </span>
 <span class="co">#&gt; [4] "test-prs.pdf"      "test.xlsx"</span></code></pre></div>
 </div>
