@@ -77,7 +77,7 @@ mfdp <- function(input, configs = NULL, run_name = "mfdp", out_dir = tempdir()) 
         generatePlots(res1, res2, filename = run_name, out_dir = out_dir)
 
         # Return results
-        return(list(res1, res2))
+        return(list(prm = res1, prs = res2))
     } else {
         # For summary table
         tac0 <- extraConf$hcrObj$args$tac # TODO: check this and below
@@ -151,6 +151,6 @@ mfdp <- function(input, configs = NULL, run_name = "mfdp", out_dir = tempdir()) 
         generateSummaryXlsx(summary, filename = paste0(run_name, "_summary"), out_dir = out_dir)
 
         # Return results
-        return(list(res1_1, res2_1, summary))
+        return(list(prm = res1_1, prs = res2_1, summary = summary))
     }
 }
