@@ -26,6 +26,28 @@ The `mfdp` package provides two samples of the single input files:
 [here](https://github.com/REDUS-IMR/mfdp/tree/main/inst/sample).
 In the same directory you can also find a sample of the control file.
 
+## TLDR
+
+For the impatient, here is how to quickly run a forecast using the provided sample files:
+
+```{r, eval = FALSE}
+# Load library
+library(mfdp)
+
+# Get input data path
+input_file <- system.file("sample", "nea-had-2020.input.csv", package = "mfdp")
+# Get param data path
+config_file <- system.file("sample", "nea-had-2020.params.txt", package = "mfdp")
+
+# Reading a single file input must be done in two steps
+## Parse the input as FLStock object
+input <- read_mfdp_input_table(input_file)
+## Run the forecast
+output <- mfdp(input, configs = config_file, run_name = "test", out_dir = "out")
+```
+
+For the more detailed descriptions, please continue below.
+
 ## Input data file structure
 
 The structure of the input data file is identical to the Lowestoft's MFDP
