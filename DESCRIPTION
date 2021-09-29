@@ -40,5 +40,6 @@ Remotes:
 Suggests: 
     rmarkdown,
     knitr,
+    kableExtra,
     tinytest
 VignetteBuilder: knitr

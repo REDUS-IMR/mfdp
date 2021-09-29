@@ -186,8 +186,12 @@ a **summary table**.
 
 ```{r}
 print(names(output))
+```
 
-print(output$summary)
+Let's see the summary from the different F basis:
+```{r}
+knitr::kable(output$summary) %>%
+  kableExtra::kable_styling(latex_options = "striped")
 ```
 
 Each **prm** and **prs** sub-lists contains the different basis of F used in the forecast.
