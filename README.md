@@ -53,7 +53,7 @@ output <- mfdp(input, run_name = "test", out_dir = "out")
 
 In addition to the original MFDP input file, R MFDP also support
 a simplified single-file input (cf. `inst/sample/nea-had-2020.input.csv`
-file). This is file is actually identical to the `.prs` file from
+file). This is file is actually identical to the `.prd` file from
 the original MFDP run outputs.
 
 However, to use the above input type, user must also provide a configuration
