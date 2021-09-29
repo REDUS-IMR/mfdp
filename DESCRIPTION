@@ -34,6 +34,9 @@ Imports:
     openxlsx,
     methods
 Additional_repositories: http://flr-project.org/R
+Remotes:
+    flr/FLCore,
+    flr/ggplotFL
 Suggests: 
     rmarkdown,
     knitr,
