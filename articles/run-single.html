@@ -72,7 +72,8 @@
 
       
 
-      </header><script src="run-single_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="run-single_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="run-single_files/kePrint-0.0.1/kePrint.js"></script><link href="run-single_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Run MFDP with a Single Input File</h1>
@@ -88,6 +89,26 @@
 <p>In addition to the classic Lowestoft’s MFDP input data, R MFDP also supports running forecast using a single file for its input data. This new method simplify the run for the users as they can have a quick overview of the data quickly.</p>
 <p>Please note you will need to provide a control file if you want to use a single input data file.</p>
 <p>The <code>mfdp</code> package provides two samples of the single input files: <a href="https://github.com/REDUS-IMR/mfdp/tree/main/inst/sample">here</a>. In the same directory you can also find a sample of the control file.</p>
+<div id="tldr" class="section level2">
+<h2 class="hasAnchor">
+<a href="#tldr" class="anchor"></a>TLDR</h2>
+<p>For the impatient, here is how to quickly run a forecast using the provided sample files:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Load library</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mfdp</span><span class="op">)</span>
+
+<span class="co"># Get input data path</span>
+<span class="va">input_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"nea-had-2020.input.csv"</span>, package <span class="op">=</span> <span class="st">"mfdp"</span><span class="op">)</span>
+<span class="co"># Get param data path</span>
+<span class="va">config_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"nea-had-2020.params.txt"</span>, package <span class="op">=</span> <span class="st">"mfdp"</span><span class="op">)</span>
+
+<span class="co"># Reading a single file input must be done in two steps</span>
+<span class="co">## Parse the input as FLStock object</span>
+<span class="va">input</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_mfdp_input_table.html">read_mfdp_input_table</a></span><span class="op">(</span><span class="va">input_file</span><span class="op">)</span>
+<span class="co">## Run the forecast</span>
+<span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mfdp.html">mfdp</a></span><span class="op">(</span><span class="va">input</span>, configs <span class="op">=</span> <span class="va">config_file</span>, run_name <span class="op">=</span> <span class="st">"test"</span>, out_dir <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span></code></pre></div>
+<p>For the more detailed descriptions, please continue below.</p>
+</div>
 <div id="input-data-file-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#input-data-file-structure" class="anchor"></a>Input data file structure</h2>
@@ -171,7 +192,7 @@ maxchangedown 25 * max annual decrease of TAC (%)</code></pre>
 <h3 class="hasAnchor">
 <a href="#loading-the-data" class="anchor"></a>Loading the data</h3>
 <p>The first step is we load the data into an <code>FLStock</code> class object:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load the mfdp library</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mfdp</span><span class="op">)</span>
 
@@ -209,7 +230,7 @@ maxchangedown 25 * max annual decrease of TAC (%)</code></pre>
 <span class="co">#&gt; harvest.spwn  : [ 11 3 1 1 1 1 ], units =  NA </span>
 <span class="co">#&gt; m.spwn        : [ 11 3 1 1 1 1 ], units =  NA</span></code></pre></div>
 <p>You might want to examine the input data to make sure everyting are properly loaded:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load the FLCore library</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://flr-project.org/FLCore">FLCore</a></span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: lattice</span>
@@ -323,7 +344,7 @@ maxchangedown 25 * max annual decrease of TAC (%)</code></pre>
 <h3 class="hasAnchor">
 <a href="#run-forecast-using-the-control-file" class="anchor"></a>Run forecast using the control file</h3>
 <p>Now that you are confident that the data is properly loaded, we can continue to run the forecast:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Get the config file path</span>
 <span class="va">config_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"nea-had-2020.params.txt"</span>,
                   package <span class="op">=</span> <span class="st">"mfdp"</span><span class="op">)</span>
@@ -347,7 +368,7 @@ maxchangedown 25 * max annual decrease of TAC (%)</code></pre>
 <h2 class="hasAnchor">
 <a href="#output-files" class="anchor"></a>Output Files</h2>
 <p>Running the <code>mfdp</code> function above will instruct MFDP to run the forecast and write output files into <code>./out</code> directory. We can check the output files:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"out"</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "test_f0_prm_plot.pdf"    "test_f0_prs_plot.pdf"   </span>
 <span class="co">#&gt;  [3] "test_f0-prm.pdf"         "test_f0-prs.pdf"        </span>
@@ -375,25 +396,157 @@ maxchangedown 25 * max annual decrease of TAC (%)</code></pre>
 <p>After successfully running a forecast, MFDP returns several output objects in a single list.</p>
 <p>The first level will have the sub-list of <strong>prm</strong> for the <strong>Management Options Table</strong> and <strong>prs</strong> for the <strong>Single Option Prediction</strong> results and<br>
 a <strong>summary table</strong>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="http://flr-project.org/FLCore/reference/names.html">names</a></span><span class="op">(</span><span class="va">output</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] "prm"     "prs"     "summary"</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">output</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span>
-<span class="co">#&gt;    Basis Total catch (2021) F ages 4-7 (2021) SSB (2022) % SSB change</span>
-<span class="co">#&gt; 1: fmgmt           232542.8         0.3499983   272206.9     9.070391</span>
-<span class="co">#&gt; 2:    f0                0.0         0.0000000   394626.3    58.122544</span>
-<span class="co">#&gt; 3:   fsq           245405.4         0.3731790   265781.1     6.495637</span>
-<span class="co">#&gt; 4:   fpa           296276.8         0.4700000   240776.3    -3.523517</span>
-<span class="co">#&gt; 5:  flim           428699.2         0.7700000   179098.2   -28.237287</span>
-<span class="co">#&gt;    % TAC change % Advice change</span>
-<span class="co">#&gt; 1:     8.159433        8.159433</span>
-<span class="co">#&gt; 2:  -100.000000     -100.000000</span>
-<span class="co">#&gt; 3:    14.142057       14.142057</span>
-<span class="co">#&gt; 4:    37.803148       37.803148</span>
-<span class="co">#&gt; 5:    99.394955       99.394955</span></code></pre></div>
-<p>Each <strong>prm</strong> and <strong>prs</strong> sub-lists contains the different basis of F used in the forecast.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="http://flr-project.org/FLCore/reference/names.html">names</a></span><span class="op">(</span><span class="va">output</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "prm"     "prs"     "summary"</span></code></pre></div>
+<p>Let’s see the summary from the different F basis:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">output</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span>,
+            bootstrap_options <span class="op">=</span> <span class="st">"striped"</span>, latex_options <span class="op">=</span> <span class="st">"striped"</span><span class="op">)</span></code></pre></div>
+<table class="table table table-striped">
+<thead><tr>
+<th style="text-align:left;">
+Basis
+</th>
+<th style="text-align:right;">
+Total catch (2021)
+</th>
+<th style="text-align:right;">
+F ages 4-7 (2021)
+</th>
+<th style="text-align:right;">
+SSB (2022)
+</th>
+<th style="text-align:right;">
+% SSB change
+</th>
+<th style="text-align:right;">
+% TAC change
+</th>
+<th style="text-align:right;">
+% Advice change
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+fmgmt
+</td>
+<td style="text-align:right;">
+232542.8
+</td>
+<td style="text-align:right;">
+0.3499983
+</td>
+<td style="text-align:right;">
+272206.9
+</td>
+<td style="text-align:right;">
+9.070391
+</td>
+<td style="text-align:right;">
+8.159432
+</td>
+<td style="text-align:right;">
+8.159432
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+f0
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+394626.3
+</td>
+<td style="text-align:right;">
+58.122544
+</td>
+<td style="text-align:right;">
+-100.000000
+</td>
+<td style="text-align:right;">
+-100.000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fsq
+</td>
+<td style="text-align:right;">
+245405.4
+</td>
+<td style="text-align:right;">
+0.3731790
+</td>
+<td style="text-align:right;">
+265781.1
+</td>
+<td style="text-align:right;">
+6.495637
+</td>
+<td style="text-align:right;">
+14.142057
+</td>
+<td style="text-align:right;">
+14.142057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fpa
+</td>
+<td style="text-align:right;">
+296276.8
+</td>
+<td style="text-align:right;">
+0.4700000
+</td>
+<td style="text-align:right;">
+240776.3
+</td>
+<td style="text-align:right;">
+-3.523517
+</td>
+<td style="text-align:right;">
+37.803148
+</td>
+<td style="text-align:right;">
+37.803148
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+flim
+</td>
+<td style="text-align:right;">
+428699.2
+</td>
+<td style="text-align:right;">
+0.7700000
+</td>
+<td style="text-align:right;">
+179098.2
+</td>
+<td style="text-align:right;">
+-28.237287
+</td>
+<td style="text-align:right;">
+99.394955
+</td>
+<td style="text-align:right;">
+99.394955
+</td>
+</tr>
+</tbody>
+</table>
+<p>Each <strong>prm</strong> and <strong>prs</strong> sub-lists contains the different basis of F used in the forecast.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Use the F management</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="http://flr-project.org/FLCore/reference/names.html">names</a></span><span class="op">(</span><span class="va">output</span><span class="op">[[</span><span class="st">"prm"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "fmgmt" "f0"    "fsq"   "fpa"   "flim"</span>
@@ -506,7 +659,7 @@ a <strong>summary table</strong>.</p>
 <p>The <strong>stk</strong> object is an <code>FLStock</code> class object <a href="https://flr-project.org/FLCore/reference/FLStock.html" class="uri">https://flr-project.org/FLCore/reference/FLStock.html</a> from the <code>FLR</code> suite <a href="https://flr-project.org/" class="uri">https://flr-project.org/</a>. The developers have provide a wealth of tutorial about the format here: <a href="https://flr-project.org/#tutorials" class="uri">https://flr-project.org/#tutorials</a>.</p>
 <p>Next we have the <strong>fmult</strong> object, which holds the <em>F multiplier</em> values over the years in the <code>FLQuant</code> class, the <strong>ftgt</strong> object which is the <em>F target</em> over the years, and lastly <strong>parameters</strong> object, which is the control parameters/configuration for the forecast.</p>
 <p>Some example of methods supported by FLStock:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://flr-project.org/FLCore">FLCore</a></span><span class="op">)</span>
 
 <span class="co"># Get the SSB</span>
@@ -571,14 +724,14 @@ a <strong>summary table</strong>.</p>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; units:  f</span></code></pre></div>
 <p>Let’s plot the forecast results:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Plot the Management Options Table</span>
 <span class="fu"><a href="http://flr-project.org/FLCore/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">output</span><span class="op">[[</span><span class="st">"prm"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"fmgmt"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stk</span><span class="op">)</span></code></pre></div>
-<p><img src="run-single_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p><img src="run-single_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Single Option Prediction</span>
 <span class="fu"><a href="http://flr-project.org/FLCore/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">output</span><span class="op">[[</span><span class="st">"prs"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"fmgmt"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stk</span><span class="op">)</span></code></pre></div>
-<p><img src="run-single_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="run-single_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
   </div>
 
